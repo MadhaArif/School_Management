@@ -135,14 +135,66 @@ namespace SMS
 
         public void SearchStudent()
         {
+            Console.WriteLine("Search by:");
+            Console.WriteLine("1. Name");
+            Console.WriteLine("2. ID");
+            Console.WriteLine("3. Class");
+            Console.WriteLine("4. Age");
+            Console.Write("Enter your choice: ");
+            int choice = int.Parse(Console.ReadLine());
 
+            switch (choice)
+            {
+                case 1:
+                    Console.Write("Enter Name to search: ");
+                    string name = Console.ReadLine();
+                    var studentsByName = students.Where(s => s.Name.ToLower().Contains(name.ToLower())).ToList();
+                    DisplayStudents(studentsByName);
+                    break;
+                case 2:
+                    Console.Write("Enter ID to search: ");
+                    int id = int.Parse(Console.ReadLine());
+                    var studentById = students.FirstOrDefault(s => s.ID == id);
+                    if (studentById != null) DisplayStudents(new List<Student> { studentById });
+                    else Console.WriteLine("Student not found.");
+                    break;
+                case 3:
+                    Console.Write("Enter Class to search: ");
+                    string className = Console.ReadLine();
+                    var studentsByClass = students.Where(s => s.ClassName.ToLower().Contains(className.ToLower())).ToList();
+                    DisplayStudents(studentsByClass);
+                    break;
+                case 4:
+                    Console.Write("Enter Age to search: ");
+                    int age = int.Parse(Console.ReadLine());
+                    var studentsByAge = students.Where(s => s.Age == age).ToList();
+                    DisplayStudents(studentsByAge);
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice.");
+                    break;
+            }
         }
 
-
+        public void DisplayAllStudents()
+        {
+            DisplayStudents(students);
+        }
 
         private void DisplayStudents(List<Student> studentsList)
         {
+            if (studentsList.Count == 0)
+            {
+                Console.WriteLine("No students found.");
+                return;
+            }
 
+            Console.WriteLine("ID\tName\tAge\tClass\tContact");
+            foreach (var student in studentsList)
+            {
+                Console.WriteLine($"{student.ID}\t{student.Name}\t{student.Age}\t{student.ClassName}\t{student.ContactInfo}");
+            }
         }
     }
 }
+
